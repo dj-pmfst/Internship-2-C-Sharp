@@ -7,11 +7,9 @@ namespace App_putovanja
         static void Main(string[] args)
         {
 
-            var id;
-
             var users = new Dictionary<int, Tuple<string, string, string>>();
 
-            var trips = new Dictionary<int, Tuple<string, int, int, int, int>>();
+            var trips = new Dictionary<int, Tuple<string, string, string, string, string>>();
 
 
             static int main_input()
@@ -31,20 +29,6 @@ namespace App_putovanja
 
             var menu_input = main_input();
 
-            //static void input_confirmation(string setting, string id)
-            //{
-            //    Console.Write("Jeste li sigurni da želite izbrisati korisnika {0}? (y/n)", id);
-            //    if (Console.ReadLine() == "y")
-            //    {
-            //        users.Remove(int.Parse(id));
-            //        Console.Write("Uspješno izbrisan korisnik {0}", int.Parse(id));
-            //    }
-            //    else
-            //    {
-            //        main_input();
-            //    }
-            //}
-
             static int users_input()
             {
                 Console.Clear();
@@ -54,7 +38,7 @@ namespace App_putovanja
                 {
                     Console.Clear();
                     Console.WriteLine("Neispravan unos. Unesite opet.");
-                    Console.Write("Korisnici \n \n Unesite broj za željenu opciju \n 1-Unos novog korisnika \n 2-Brisanje korisnika \n 3-Uređivanje korisnika \n 4-Pregled svih korisnika \n 0-Povratak na glavni izbornik \n \n Odabir:");
+                    Console.Write("\n Unesite broj za željenu opciju \n 1-Unos novog korisnika \n 2-Brisanje korisnika \n 3-Uređivanje korisnika \n 4-Pregled svih korisnika \n 0-Povratak na glavni izbornik \n \n Odabir:");
                     input = Console.ReadLine();
                 }
                 return int.Parse(input);
@@ -62,6 +46,7 @@ namespace App_putovanja
 
             void users_menu(int user_menu_input)
             {
+                string id;
                 switch (user_menu_input)
                 {
                     case 1:
@@ -80,15 +65,13 @@ namespace App_putovanja
 
                     case 2:
                         Console.Clear();
-                        Console.WriteLine("Brisanje korisnika \n \n 1-Unos ID-a \n 2-Unos imena i prezimena");
-                        Console.Write("Unos:");
+                        Console.Write("Brisanje korisnika \n \n 1-Unos ID-a \n 2-Unos imena i prezimena \n \n Unos:");
                         var input_delete = Console.ReadLine();
                         while (!int.TryParse(input_delete, out int number) || int.Parse(input_delete) > 2 || int.Parse(input_delete) < 0)
                         {
                             Console.Clear();
                             Console.WriteLine("Neispravan unos. Unesite opet.");
-                            Console.WriteLine("Brisanje korisnika \n \n 1-Unos ID-a \n 2-Unos imena i prezimena");
-                            Console.Write("Unos:");
+                            Console.Write("Unesite broj za željenu opciju \n 1-Unos ID-a \n 2-Unos imena i prezimena \n \n Unos:");
                             input_delete = Console.ReadLine();
                         }
                         if (int.Parse(input_delete) == 1)
@@ -110,39 +93,101 @@ namespace App_putovanja
                             }
                             else
                             {
+                                Console.Clear();
                                 main_input();
                             }
                         }
                         else if (int.Parse(input_delete) == 2)
                         {
                             Console.Write("Unesite ime i prezime:");
+                            var input_name = Console.ReadLine().Split(' ')[0];
+                            var input_surname = Console.ReadLine().Split(' ')[1];
+
+                            foreach (var entry in users)
+                            {
+                                var user = entry.Value; 
+                                if (user.Item1.ToLower() == input_name.ToLower() && user.Item2.ToLower() == input_surname.ToLower())
+                                {
+                                    Console.Write("Jeste li sigurni da želite izbrisati korisnika {0} {1}? (y/n)", input_name, input_surname);
+                                    if (Console.ReadLine() == "y")
+                                    {
+                                        //users.Remove(int.Parse(id));
+                                        Console.Write("Uspješno izbrisan korisnik {0} {1}", input_name, input_surname);
+                                    }
+                                    else
+                                    {
+                                        main_input();
+                                    }
+                                }
+                                else
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine("Uneseni korisnik ne postoji.");
+                                    main_input();
+                                }
+                            }
 
 
-                            Console.Write("Jeste li sigurni da želite izbrisati korisnika {0}? (y/n)", int.Parse(id));
-                            if (Console.ReadLine() == "y")
-                            {
-                                users.Remove(int.Parse(id));
-                                Console.Write("Uspješno izbrisan korisnik {0}", int.Parse(id));
-                            }
-                            else
-                            {
-                                main_input();
-                            }
                         }
-
                             break;
 
                     case 3:
-                        Console.WriteLine("Uređivanje korisnika \n \n Unesite ID korisnika:");
-                        var id_input = Console.ReadLine();
+                        Console.Clear();
+                        Console.Write("Uređivanje korisnika \n \n Unesite ID korisnika:");
+                        id = Console.ReadLine();
+                        while (!int.TryParse(id, out int number) || int.Parse(id) > users.Count() || int.Parse(id) < 0)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Neispravan unos. Unesite opet.");
+                            Console.Write("Unos:");
+                            id = Console.ReadLine();
+                        }
+                        Console.Write("Jeste li sigurni da želite urediti korisnika {0}? (y/n)", int.Parse(id));
+                        if (Console.ReadLine() == "y")
+                        {
+                            Console.Clear();
+                            Console.Write("Unesite novo ime:");
+                            var new_name = Console.ReadLine();
+                            Console.Write("Unesite novo prezime:");
+                            var new_surname = Console.ReadLine();
+                            Console.Write("Unesite novi datum rođenja:");
+                            var new_dob = Console.ReadLine();
+
+                            users[int.Parse(id)] = Tuple.Create(new_name, new_surname, new_dob);
+
+                            Console.Write("Uspješno uređen korisnik {0}", int.Parse(id));
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            main_input();
+                        }
 
                         break;
 
                     case 4:
-                        Console.WriteLine("Pregled svih korisnika \n \n 1-Ispis svih korisnika abecedno po prezimenu \n 2-Ispis svih korisnika iznad 20 godina 3-Ispis svih korisnika s 2 ili više putovanja");
-                        Console.Write("Unos:");
+                        Console.Write("Pregled svih korisnika \n \n 1-Ispis svih korisnika abecedno po prezimenu \n 2-Ispis svih korisnika iznad 20 godina \n 3-Ispis svih korisnika s 2 ili više putovanja \n \n Odabir:");
+                        var overview_input = Console.ReadLine();
+                        while (!int.TryParse(overview_input, out int number) || int.Parse(overview_input) > 3 || int.Parse(overview_input) < 0)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Neispravan unos. Unesite opet.");
+                            Console.Write("1-Ispis svih korisnika abecedno po prezimenu \n 2-Ispis svih korisnika iznad 20 godina \n 3-Ispis svih korisnika s 2 ili više putovanja \n \n Odabir:");
+                            overview_input = Console.ReadLine();
+                        }
+                        if (int.Parse(overview_input) == 1)
+                        {
 
-                        break;
+                        }
+                        else if (int.Parse(overview_input) == 2)
+                        {
+
+                        }
+                        else if (int.Parse(overview_input) == 3)
+                        {
+
+                        }
+                         break;
 
                     case 0:
                         Console.Clear();
@@ -156,7 +201,7 @@ namespace App_putovanja
                 Console.Clear();
                 Console.Write("Putovanja\n \n Unesite broj za željenu opciju \n 1-Unos novog putovanja \n 2-Brisanje putovanja \n 3-Uređivanje postojećeg putovanja \n 4-Pregled svih putovanja \n 5-Izvještaji i analize \n 0-Povratak na glavni izbornik \n \n Odabir:");
                 var input = Console.ReadLine();
-                while (!int.TryParse(input, out int number) || int.Parse(input) > 4 || int.Parse(input) < 0)
+                while (!int.TryParse(input, out int number) || int.Parse(input) > 5 || int.Parse(input) < 0)
                 {
                     Console.Clear();
                     Console.WriteLine("Neispravan unos. Unesite opet.");
@@ -166,23 +211,140 @@ namespace App_putovanja
                 return int.Parse(input);
             }
 
-            static void trip_menu(int trip_menu_input)
+            void trip_menu(int trip_menu_input)
             {
                 switch (trip_menu_input)
                 {
                     case 1:
+                        Console.Clear();
+                        Console.Write("Unos novog putovanja");
+
+                        Console.WriteLine("Ukupan trošak ovog putovanja je");
+
                         break;
 
                     case 2:
+                        Console.Clear();
+                        Console.Write("Brisanje putovanja \n \n 1-Unos ID-a \n 2-Putovanja skuplja od unesenog iznosa \n 3-Putovanja jeftinija od unesenog iznosa \n \n Odabir:");
+                        var input_delete = Console.ReadLine();
+                        while (!int.TryParse(input_delete, out int number) || int.Parse(input_delete) > 3 || int.Parse(input_delete) < 0)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Neispravan unos. Unesite opet.");
+                            Console.Write("Brisanje putovanja \n \n 1-Unos ID-a \n 2-Putovanja skuplja od unesenog iznosa \n 3-Putovanja jeftinija od unesenog iznosa \n \n Odabir:");
+                            input_delete = Console.ReadLine();
+                        }
+                        if (int.Parse(input_delete) == 1)
+                        {
+
+                        }
+                        else if (int.Parse(input_delete) == 2)
+                        {
+
+                        }
+                        else if (int.Parse(input_delete) == 3)
+                        {
+
+                        }
+
                         break;
 
                     case 3:
+                        Console.Clear();
+                        Console.Write("Uređivanje putovanja \n \n Unesite ID putovanja:");
+                        var id = Console.ReadLine();
+                        while (!int.TryParse(id, out int number) || int.Parse(id) > trips.Count() || int.Parse(id) < 0)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Neispravan unos. Unesite opet.");
+                            Console.Write("Unos:");
+                            id = Console.ReadLine();
+                        }
+                        Console.Write("Jeste li sigurni da želite urediti putovanje {0}? (y/n)", int.Parse(id));
+                        if (Console.ReadLine() == "y")
+                        {
+                            Console.Clear();
+                            Console.Write("Unesite novoi datum:");
+                            var new_date = Console.ReadLine();
+                            Console.Write("Unesite novu kilometražu:");
+                            var new_distance = Console.ReadLine();
+                            Console.Write("Unesite novo gorivo:");
+                            var new_gas = Console.ReadLine();
+                            Console.Write("Unesite novu cijenu:");
+                            var new_price = Console.ReadLine();
+
+                            //trips[int.Parse(id)] = Tuple.Create(new_date, new_distance, new_gas, new_price);
+
+                            Console.Write("Uspješno uređen putovanje {0}", int.Parse(id));
+                        }
+                        else
+                        {
+                            main_input();
+                        }
                         break;
 
                     case 4:
+                        Console.Clear();
+                        Console.Write("Pregled svih putovanja \n \n 1-Prema redoslijedu spremanja \n 2-Prema trošku uzlazno \n 3-Prema trošku silazno \n 4-Prema kilometraži uzlazno \n 5-Prema kilometraži silazno \n 6-Prema datumu uzlazno \n 7-Prema datumu silazno \n \n Odabir:");
+                        var input_overview = Console.ReadLine();
+                        while (!int.TryParse(input_overview, out int number) || int.Parse(input_overview) > 7 || int.Parse(input_overview) < 0)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Neispravan unos. Unesite opet.");
+                            Console.Write("Pregled svih putovanja \n \n 1-Prema redoslijedu spremanja \n 2-Prema trošku uzlazno \n 3-Prema trošku silazno \n 4-Prema kilometraži uzlazno \n 5-Prema kilometraži silazno \n 6-Prema datumu uzlazno \n 7-Prema datumu silazno \n \n Odabir:");
+                            input_overview = Console.ReadLine();
+                        }
                         break;
 
                     case 5:
+                        Console.Clear();
+                        Console.WriteLine("Izvještaji i analize \n \n Izaberite korisnika");
+                        foreach (var item in users)
+                        {
+                            Console.WriteLine("\n", item);
+                        }
+                        Console.Write("\n Odabir:");
+                        id = Console.ReadLine();
+                        while (!int.TryParse(id, out int number) || int.Parse(id) > users.Count() || int.Parse(id) < 0)
+                        {
+                            Console.WriteLine("Neispravan unos. Unesite opet.");
+                            Console.Write("Unos:");
+                            id = Console.ReadLine();
+                        }
+                        Console.Write("Odaberite želejni izvještaj \n \n 1-Ukupna potrošnja goriva \n 2-Ukupni troškovi goriva \n 3-Prosječna potrošnja goriva \n 4-Putovanje s najvećom potrošnjom goriva \n 5-Pregled putovanja po određenom datumu \n \n Odabir:");
+                        var input_report = Console.ReadLine();
+                        while (!int.TryParse(input_report, out int number) || int.Parse(input_report) > 5 || int.Parse(input_report) < 0)
+                        {
+                            Console.WriteLine("Neispravan unos. Unesite opet.");
+                            Console.Write("Odabir:");
+                            input_report = Console.ReadLine();
+                        }
+                        switch (int.Parse(input_report))
+                        {
+                            case 1:
+                                var total_gas=0.0;
+                                Console.WriteLine("Ukupna potrošnja goriva za korisnika {0} je {1} litara.", id, total_gas);
+                                break;
+                            case 2:
+                                var total_cost = 0.0;
+                                Console.WriteLine("Ukupni troškovi goriva za korisnika {0} su {1} €", id, total_cost);
+                                break;
+                            case 3:
+                                var average_gas = 0.0;
+                                Console.WriteLine("Prosječna potrošnja goriva za korisnika {0} je {1} litara", id, average_gas);
+                                break;
+                            case 4:
+                                foreach (var item in users)
+                                {
+                                    
+                                }
+                                Console.WriteLine("Putovanje s najvećom potrošnjom goriva za korisnika je .");
+                                break;
+                            case 5:
+                                Console.WriteLine("Pregled putovanja po određenom datumu");
+                                break;
+                        }
+
                         break;
 
                     case 0:
