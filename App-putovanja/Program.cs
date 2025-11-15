@@ -106,7 +106,9 @@ namespace App_putovanja
             {
                 foreach (var trip in user_trips)
                 {
-                    Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", 
+                    Console.WriteLine("ID: {0} \nDatum: {1} \nUdaljenost: {2} km " +
+                        "\nGorivo {3} l \nCijena goriva po litri: {4} eura " +
+                        "\nUkupni trošak: {5} eura \n", 
                         trip.Key, trip.Value.Item1, trip.Value.Item2, trip.Value.Item3, trip.Value.Item4, 
                         Math.Round(trip.Value.Item5,2));
                 }
@@ -117,16 +119,24 @@ namespace App_putovanja
 
             static void user_delete_id(Dictionary<int, Tuple<string, string, string, List<int>>> user_list)
             {
-                Console.Write("Unesite ID.");
-                var id = input_valid("0", user_list.Count()-1);
-
-                Console.Write("Jeste li sigurni da želite izbrisati korisnika {0}? (y/n)", id);
+                Console.Write("Unesite ID: ");
+                var input = Console.ReadLine();
+                while (!int.TryParse(input, out int number) || !user_list.ContainsKey(number))
+                {
+                    Console.Write("Neispravan unos. Unesite opet: ");
+                    input = Console.ReadLine();
+                }
+                int id = int.Parse(input);
+                Console.Write("Jeste li sigurni da želite izbrisati korisnika {0}? (y/n) ", id);
                 string confirm = Console.ReadLine();
+
+                string name = user_list[id].Item1;
+                string surname = user_list[id].Item2;
+
                 if (confirm.ToLower() == "y" || confirm.ToLower() == "yes" || confirm.ToLower() == "da")
                 {
                     user_list.Remove(id);
-                    Console.Write("\n Uspješno izbrisan korisnik {0} {1}", 
-                        user_list[id].Item1, user_list[id].Item2);
+                    Console.Write("\n Uspješno izbrisan korisnik {0} {1}", name, surname);
                 }
                 else
                 {
@@ -245,15 +255,22 @@ namespace App_putovanja
 
             static void trip_delete_id(Dictionary<int, Tuple<string, double, double, double, double>> trip_list)
             {
-                Console.Write("\nUnesite ID putovanje koje želite izbrisati.");
-                var id_remove = input_valid("0", trip_list.Count()-1);
+                Console.Write("\nUnesite ID putovanje koje želite izbrisati: ");
+                var id_remove = Console.ReadLine();
 
-                Console.Write("Jeste li sigurni da želite izbrisati putovanje {0}? (y/n)", id_remove);
+                while (!int.TryParse(id_remove, out int number) || !trip_list.ContainsKey(number))
+                {
+                    Console.Write("Neispravan unos. Unesite opet: ");
+                    id_remove = Console.ReadLine();
+                }
+                int id = int.Parse(id_remove);
+
+                Console.Write("Jeste li sigurni da želite izbrisati putovanje {0}? (y/n) ", id_remove);
                 var confirmation = Console.ReadLine();
                 if (confirmation.ToLower() == "y" || confirmation.ToLower() == "yes" || confirmation.ToLower() == "da")
                 {
-                    trip_list.Remove(id_remove);
-                    Console.Write("\n Uspješno izbrisano putovanje {0}", id_remove);
+                    trip_list.Remove(id);
+                    Console.Write("\n Uspješno izbrisano putovanje {0}", id);
                 }
                 else
                 {
@@ -266,7 +283,7 @@ namespace App_putovanja
                 Console.Write("\nBrisanje putovanja s većim troškovima od određenog iznosa \n Unesite iznos:");
                 var ammount = number_valid(Console.ReadLine());
 
-                Console.Write("Jeste li sigurni da želite izbrisati putovanja s većim troškovima od {0} eura? (y/n)", ammount);
+                Console.Write("Jeste li sigurni da želite izbrisati putovanja s većim troškovima od {0} eura? (y/n) ", ammount);
                 var confirmation = Console.ReadLine();
                 if (confirmation.ToLower() == "y" || confirmation.ToLower() == "yes" || confirmation.ToLower() == "da")
                 {
@@ -288,20 +305,20 @@ namespace App_putovanja
             static void trip_delete_lower_cost(Dictionary<int, Tuple<string, double, double, double, double>> trip_list)
             {
                 Console.Write("\nBrisanje putovanja s manjim troškovima od određenog iznosa \n Unesite iznos:");
-                var ammount = number_valid(Console.ReadLine());
+                var amount = number_valid(Console.ReadLine());
 
-                Console.Write("Jeste li sigurni da želite izbrisati putovanja s manjim troškovima od {0} eura? (y/n)", ammount);
+                Console.Write("Jeste li sigurni da želite izbrisati putovanja s manjim troškovima od {0} eura? (y/n) ", amount);
                 var confirmation = Console.ReadLine();
                 if (confirmation.ToLower() == "y" || confirmation.ToLower() == "yes" || confirmation.ToLower() == "da")
                 {
                     foreach (var trip in trip_list)
                     {
-                        if (trip.Value.Item5 < ammount)
+                        if (trip.Value.Item5 < amount)
                         {
                             trip_list.Remove(trip.Key);
                         }
                     }
-                    Console.Write("\n Uspjesno izbrisana putovanja s troškovima manjim do {0} eura.", ammount);
+                    Console.Write("\n Uspjesno izbrisana putovanja s troškovima manjim do {0} eura.", amount);
                 }
                 else
                 {
@@ -314,7 +331,7 @@ namespace App_putovanja
                 Console.Write("Uređivanje putovanja \n \n Unesite ID putovanja.");
                 var id = input_valid("0", trip_list.Count() - 1);
 
-                Console.Write("Jeste li sigurni da želite urediti putovanje {0}? (y/n)", id);
+                Console.Write("Jeste li sigurni da želite urediti putovanje {0}? (y/n) ", id);
                 var confirmation = Console.ReadLine();
                 if (confirmation.ToLower() == "y" || confirmation.ToLower() == "yes" || confirmation.ToLower() == "da")
                 {
@@ -347,7 +364,9 @@ namespace App_putovanja
                         Console.WriteLine("Ispis svih putovanja prema redoslijedu spremanja \n \n");
                         foreach (var trip in trips_list)
                         {
-                            Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", 
+                            Console.WriteLine("ID: {0} \nDatum: {1} \nUdaljenost: {2} km " +
+                                "\nGorivo {3} l \nCijena goriva po litri: {4} eura " +
+                                "\nUkupni trošak: {5} eura\n", 
                                 trip.Key, trip.Value.Item1, trip.Value.Item2, trip.Value.Item3, trip.Value.Item4, 
                                 trip.Value.Item5);
                         }
@@ -431,7 +450,6 @@ namespace App_putovanja
                         {
                             double spent_gas = trips_list[trip_id].Item3;
                             if (spent_gas > max_gas) { max_gas = spent_gas; max_id = trip_id; }
-
                         }
 
                         if (max_id != -1) 
@@ -453,7 +471,9 @@ namespace App_putovanja
                             {
                                 found = true;
                                 Console.WriteLine("\n Pronađena putovanja s unesenim datumom:");
-                                Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", 
+                                Console.WriteLine("ID: {0} \nDatum: {1} \nUdaljenost: {2} km " +
+                                    "\nGorivo {3} l \nCijena goriva po litri: {4} eura " +
+                                    "\nUkupni trošak: {5} eura \n", 
                                     trip_id, trips_list[trip_id].Item1, trips_list[trip_id].Item2, trips_list[trip_id].Item3,
                                     trips_list[trip_id].Item4, trips_list[trip_id].Item5);
                             }
@@ -495,14 +515,9 @@ namespace App_putovanja
 
                         var input_delete = input_valid(menu_text,2);
 
-                        if (input_delete == 1)
-                        {
-                            user_delete_id(users);
-                        }
-                        else if (input_delete == 2)
-                        {
-                            user_delete_name(users);
-                        }
+                        if (input_delete == 1) { user_delete_id(users); }
+                        else if (input_delete == 2) { user_delete_name(users); }
+
                         break;
 
                     case 3:
@@ -510,7 +525,7 @@ namespace App_putovanja
                         Console.Write("Uređivanje korisnika \n \n Unesite ID korisnika.");
                         id = input_valid("0", users.Count() - 1);
 
-                        Console.Write("\nJeste li sigurni da želite urediti korisnika {0} - {1} - {2} - {3} (y/n)?", 
+                        Console.Write("\nJeste li sigurni da želite urediti korisnika {0} - {1} - {2} - {3} (y/n)? ", 
                             id, users[id].Item1, users[id].Item2, users[id].Item3);
 
                         confirmation = Console.ReadLine();
@@ -527,18 +542,10 @@ namespace App_putovanja
 
                         var overview_input = input_valid(menu_text,3);
 
-                        if (overview_input == 1)
-                        {
-                            user_sort_alphabet(users);
-                        }
-                        else if (overview_input == 2)
-                        {
-                            user_sort_over20(users);
-                        }
-                        else if (overview_input == 3)
-                        {
-                            user_sort_2trips(users);    
-                        }
+                        if (overview_input == 1) { user_sort_alphabet(users); }
+                        else if (overview_input == 2) { user_sort_over20(users); }
+                        else if (overview_input == 3) { user_sort_2trips(users); }
+
                         Console.Write("\n Pritisnite bilo koju tipku za nastavak...");
                         Console.ReadKey();
                         break;
@@ -586,19 +593,10 @@ namespace App_putovanja
 
                         var input_delete = input_valid(menu_text,3);
 
-                        if (input_delete == 1)
-                        {
-                            trip_delete_id(trips);
-                        }
-                        else if (input_delete == 2)
-                        {
-                            trip_delete_higher_cost(trips);  
-                        }
-                        else if (input_delete == 3)
-                        {
-                            trip_delete_lower_cost(trips);
+                        if (input_delete == 1) { trip_delete_id(trips); }
+                        else if (input_delete == 2) { trip_delete_higher_cost(trips); }
+                        else if (input_delete == 3) { trip_delete_lower_cost(trips); }
 
-                        }
                         Console.Write("\n Pritisnite bilo koju tipku za nastavak...");
                         Console.ReadKey();
                         break;
@@ -666,7 +664,6 @@ namespace App_putovanja
 
             bool inApp = true;
 
-
             var users = new Dictionary<int, Tuple<string, string, string, List<int>>>();
             users[0] = Tuple.Create("Ana", "Anic", "1985-04-12", new List<int> { 1, 2 });
             users[1] = Tuple.Create("Ivo", "Ivic", "1992-09-25", new List<int> { 5 });
@@ -680,9 +677,6 @@ namespace App_putovanja
             trips[2] = Tuple.Create("2025-09-10", 100.0, 6.0, 1.45, 8.7);
             trips[3] = Tuple.Create("2025-12-11", 40.0, 6.0, 1.40, 8.4);
             trips[4] = Tuple.Create("2025-06-02", 320.0, 20.0, 1.65, 33.0);
-
-
-
 
             while (inApp)
             {
