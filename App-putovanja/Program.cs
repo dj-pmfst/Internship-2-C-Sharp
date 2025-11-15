@@ -10,25 +10,12 @@ namespace App_putovanja
         static void Main(string[] args)
         {
 
-            var users = new Dictionary<int, Tuple<string, string, string, List<int>>>();
-            users[0] = Tuple.Create("Ana", "Anic", "1985-04-12", new List<int> {1, 2});
-            users[1] = Tuple.Create("Ivo", "Ivic", "1992-09-25", new List<int> {5});
-            users[2] = Tuple.Create("Hrvoje", "Horvat", "2000-07-06", new List<int> {1,3,4});
-            users[3] = Tuple.Create("Maria", "Maric", "2002-07-09", new List<int>());
-
-
-            var trips = new Dictionary<int, Tuple<string, double, double, double, double>>();
-            trips[0] = Tuple.Create("2025-03-15", 350.0, 20.5, 1.60, 32.8);
-            trips[1] = Tuple.Create("2025-03-18", 120.0, 8.0, 1.55, 12.4);
-            trips[2] = Tuple.Create("2025-09-10", 100.0, 6.0, 1.45, 8.7);
-            trips[3] = Tuple.Create("2025-12-11", 40.0, 6.0, 1.40, 8.4);
-            trips[4] = Tuple.Create("2025-06-02", 320.0, 20.0, 1.65, 33.0);
-
-
             static int main_input()
             {
                 Console.Write("Glavni izbornik \n \n ");
-                var menu_text = "Unesite broj za željenu opciju \n 1-Korisnici \n 2-Putovanja \n 0-Izlaz iz aplikacije";
+                var menu_text = "Unesite broj za željenu opciju " +
+                    "\n 1-Korisnici \n 2-Putovanja " +
+                    "\n 0-Izlaz iz aplikacije";
 
                 var first_input = input_valid(menu_text, 2);
 
@@ -38,7 +25,10 @@ namespace App_putovanja
             static int users_input()
             {
                 Console.Clear();
-                var menu_text = "Unesite broj za željenu opciju \n 1-Unos novog korisnika \n 2-Brisanje korisnika \n 3-Uređivanje korisnika \n 4-Pregled svih korisnika \n 0-Povratak na glavni izbornik";
+                var menu_text = "Unesite broj za željenu opciju " +
+                    "\n 1-Unos novog korisnika \n 2-Brisanje korisnika " +
+                    "\n 3-Uređivanje korisnika \n 4-Pregled svih korisnika " +
+                    "\n 0-Povratak na glavni izbornik";
                 Console.Write("Korisnici \n \n");
 
                 var u_input = input_valid(menu_text, 4);
@@ -50,7 +40,10 @@ namespace App_putovanja
             {
                 Console.Clear();
                 Console.Write("Putovanja \n \n ");
-                var menu_text = "Unesite broj za željenu opciju \n 1-Unos novog putovanja \n 2-Brisanje putovanja \n 3-Uređivanje postojećeg putovanja \n 4-Pregled svih putovanja \n 5-Izvještaji i analize \n 0-Povratak na glavni izbornik";
+                var menu_text = "Unesite broj za željenu opciju " +
+                    "\n 1-Unos novog putovanja \n 2-Brisanje putovanja " +
+                    "\n 3-Uređivanje postojećeg putovanja \n 4-Pregled svih putovanja " +
+                    "\n 5-Izvještaji i analize \n 0-Povratak na glavni izbornik";
                 var input = input_valid(menu_text, 5);
                 return input;
             }
@@ -113,7 +106,9 @@ namespace App_putovanja
             {
                 foreach (var trip in user_trips)
                 {
-                    Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", trip.Key, trip.Value.Item1, trip.Value.Item2, trip.Value.Item3, trip.Value.Item4, Math.Round(trip.Value.Item5,2));
+                    Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", 
+                        trip.Key, trip.Value.Item1, trip.Value.Item2, trip.Value.Item3, trip.Value.Item4, 
+                        Math.Round(trip.Value.Item5,2));
                 }
                 Console.Write("\n Pritisnite bilo koju tipku za nastavak...");
                 Console.ReadKey();
@@ -130,7 +125,8 @@ namespace App_putovanja
                 if (confirm.ToLower() == "y" || confirm.ToLower() == "yes" || confirm.ToLower() == "da")
                 {
                     user_list.Remove(id);
-                    Console.Write("\n Uspješno izbrisan korisnik {0} {1}", user_list[id].Item1, user_list[id].Item2);
+                    Console.Write("\n Uspješno izbrisan korisnik {0} {1}", 
+                        user_list[id].Item1, user_list[id].Item2);
                 }
                 else
                 {
@@ -147,7 +143,9 @@ namespace App_putovanja
                 Console.Write("Unesite prezime: ");
                 var input_surname = name_valid(Console.ReadLine(), "surname");
 
-                var match = user_list.FirstOrDefault(u => string.Equals(u.Value.Item1.Trim(), input_name.Trim(), StringComparison.OrdinalIgnoreCase) && string.Equals(u.Value.Item2.Trim(), input_surname.Trim(), StringComparison.OrdinalIgnoreCase));
+                var match = user_list.FirstOrDefault(u => string.Equals(u.Value.Item1.Trim(), input_name.Trim(), 
+                    StringComparison.OrdinalIgnoreCase) && string.Equals(u.Value.Item2.Trim(), input_surname.Trim(), 
+                    StringComparison.OrdinalIgnoreCase));
 
                 if (match.Equals(default(KeyValuePair<int, Tuple<string, string, string, List<int>>>)))
                 {
@@ -186,7 +184,8 @@ namespace App_putovanja
 
                     user_list[id] = Tuple.Create(new_name, new_surname, new_dob, user_list[id].Item4);
                     Console.WriteLine("\n");
-                    Console.Write("Uspješno uređen korisnik {0} - {1} - {2} - {3} .", id, user_list[id].Item1, user_list[id].Item2, user_list[id].Item3);
+                    Console.Write("Uspješno uređen korisnik {0} - {1} - {2} - {3} .", 
+                        id, user_list[id].Item1, user_list[id].Item2, user_list[id].Item3);
                 }
                 else
                 {
@@ -197,18 +196,19 @@ namespace App_putovanja
                 Console.ReadKey();
             }
 
-            static void user_sort_alphabet(Dictionary<int, Tuple<string, string, string, List<int>>> users)
+            static void user_sort_alphabet(Dictionary<int, Tuple<string, string, string, List<int>>> users_list)
             {
                 Console.Clear();
                 Console.WriteLine("Ispisi svih korisnika abecedno po prezimenu \n");
 
-                var user_list = new List<KeyValuePair<int, Tuple<string, string, string, List<int>>>>(users);
+                var user_list = new List<KeyValuePair<int, Tuple<string, string, string, List<int>>>>(users_list);
 
                 user_list.Sort((a, b) => string.Compare(a.Value.Item2, b.Value.Item2, StringComparison.OrdinalIgnoreCase));
 
                 foreach (var user in user_list)
                 {
-                    Console.WriteLine("{0} - {1} - {2} - {3}", user.Key, user.Value.Item1, user.Value.Item2, user.Value.Item3);
+                    Console.WriteLine("{0} - {1} - {2} - {3}", 
+                        user.Key, user.Value.Item1, user.Value.Item2, user.Value.Item3);
                 }
             }
 
@@ -221,7 +221,8 @@ namespace App_putovanja
                 {
                     if ((DateTime.Now.Year - DateTime.Parse(user.Value.Item3).Year) > 19)
                     {
-                        Console.WriteLine("{0} - {1} - {2} - {3}", user.Key, user.Value.Item1, user.Value.Item2, user.Value.Item3);
+                        Console.WriteLine("{0} - {1} - {2} - {3}", 
+                            user.Key, user.Value.Item1, user.Value.Item2, user.Value.Item3);
                     }
                 }
             }
@@ -235,7 +236,8 @@ namespace App_putovanja
                 {
                     if (user.Value.Item4.Count() >= 2)
                     {
-                        Console.WriteLine("{0} - {1} - {2} - {3}", user.Key, user.Value.Item1, user.Value.Item2, user.Value.Item3);
+                        Console.WriteLine("{0} - {1} - {2} - {3}", 
+                            user.Key, user.Value.Item1, user.Value.Item2, user.Value.Item3);
                     }
                 }
             }
@@ -335,17 +337,19 @@ namespace App_putovanja
                 }
             }
 
-            static void trips_overview(Dictionary<int, Tuple<string, double, double, double, double>> trips, int input)
+            static void trips_overview(Dictionary<int, Tuple<string, double, double, double, double>> trips_list, int input)
             {
-                var trip_list = new List<KeyValuePair<int, Tuple<string, double, double, double, double>>>(trips);
+                var trip_list = new List<KeyValuePair<int, Tuple<string, double, double, double, double>>>(trips_list);
                 switch (input)
                 {
                     case 1:
                         Console.Clear();
                         Console.WriteLine("Ispis svih putovanja prema redoslijedu spremanja \n \n");
-                        foreach (var trip in trips)
+                        foreach (var trip in trips_list)
                         {
-                            Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", trip.Key, trip.Value.Item1, trip.Value.Item2, trip.Value.Item3, trip.Value.Item4, trip.Value.Item5);
+                            Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", 
+                                trip.Key, trip.Value.Item1, trip.Value.Item2, trip.Value.Item3, trip.Value.Item4, 
+                                trip.Value.Item5);
                         }
                         Console.Write("\n Pritisnite bilo koju tipku za nastavak...");
                         Console.ReadKey();
@@ -401,7 +405,8 @@ namespace App_putovanja
                 }
             }
 
-            static void user_trip_analysis (int input_report, int id, double total_gas, double total_cost, Dictionary<int, Tuple<string, double, double, double, double>> trips, List<int> user_trips)
+            static void user_trip_analysis (int input_report, int id, double total_gas, double total_cost, 
+                Dictionary<int, Tuple<string, double, double, double, double>> trips_list, List<int> user_trips)
             {
                 switch (input_report)
                 {
@@ -421,13 +426,17 @@ namespace App_putovanja
                     case 4:
                         var max_id = -1;
                         double max_gas = -1;
+
                         foreach (var trip_id in user_trips)
                         {
-                            double spent_gas = trips[trip_id].Item3;
+                            double spent_gas = trips_list[trip_id].Item3;
                             if (spent_gas > max_gas) { max_gas = spent_gas; max_id = trip_id; }
 
                         }
-                        if (max_id != -1) { Console.WriteLine("\n Putovanje s najvećom potrošnjom goriva za korisnika {0} je {1} s potrošnjom od {2} L.", id, max_id, Math.Round(max_gas, 2)); }
+
+                        if (max_id != -1) 
+                        { Console.WriteLine("\n Putovanje s najvećom potrošnjom goriva za korisnika {0} je {1} s potrošnjom od {2} L.", 
+                            id, max_id, Math.Round(max_gas, 2)); }
                         else { Console.WriteLine("Korisnik nema unesenih putovanja."); }
                         break;
 
@@ -439,12 +448,14 @@ namespace App_putovanja
 
                         foreach (var trip_id in user_trips)
                         {
-                            DateTime trip_date = DateTime.Parse(trips[trip_id].Item1);
+                            DateTime trip_date = DateTime.Parse(trips_list[trip_id].Item1);
                             if (trip_date == DateTime.Parse(date_search))
                             {
                                 found = true;
                                 Console.WriteLine("\n Pronađena putovanja s unesenim datumom:");
-                                Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", trip_id, trips[trip_id].Item1, trips[trip_id].Item2, trips[trip_id].Item3, trips[trip_id].Item4, trips[trip_id].Item5);
+                                Console.WriteLine("{0} - {1} - {2} - {3} - {4} - {5}", 
+                                    trip_id, trips_list[trip_id].Item1, trips_list[trip_id].Item2, trips_list[trip_id].Item3,
+                                    trips_list[trip_id].Item4, trips_list[trip_id].Item5);
                             }
                         }
                         if (found == false) { Console.WriteLine("Ne postoji putovanje s unesenim datumom."); }
@@ -453,7 +464,8 @@ namespace App_putovanja
             }
 
 
-            void users_menu(int user_menu_input)
+            void users_menu(int user_menu_input, Dictionary<int, Tuple<string, string, string, List<int>>> users,
+                Dictionary<int, Tuple<string, double, double, double, double>> trips)
             {
                 int id;
                 string menu_text;
@@ -478,7 +490,8 @@ namespace App_putovanja
                     case 2:
                         Console.Clear();
                         Console.Write("Brisanje korisnika \n \n ");
-                        menu_text = "1-Unos ID-a \n 2-Unos imena i prezimena";
+                        menu_text = "1-Unos ID-a \n 2-Unos imena i prezimena" +
+                            "\n 0-Povratak na glavni izbornik";
 
                         var input_delete = input_valid(menu_text,2);
 
@@ -497,7 +510,9 @@ namespace App_putovanja
                         Console.Write("Uređivanje korisnika \n \n Unesite ID korisnika.");
                         id = input_valid("0", users.Count() - 1);
 
-                        Console.Write("\nJeste li sigurni da želite urediti korisnika {0} - {1} - {2} - {3} (y/n)?", id, users[id].Item1, users[id].Item2, users[id].Item3);
+                        Console.Write("\nJeste li sigurni da želite urediti korisnika {0} - {1} - {2} - {3} (y/n)?", 
+                            id, users[id].Item1, users[id].Item2, users[id].Item3);
+
                         confirmation = Console.ReadLine();
                         user_edit(users, confirmation, id);
                         break;
@@ -505,7 +520,11 @@ namespace App_putovanja
                     case 4:
                         Console.Clear();
                         Console.Write("Pregled svih korisnika \n \n");
-                        menu_text = " 1-Ispis svih korisnika abecedno po prezimenu \n 2-Ispis svih korisnika iznad 20 godina \n 3-Ispis svih korisnika s 2 ili više putovanja";
+                        menu_text = " 1-Ispis svih korisnika abecedno po prezimenu " +
+                            "\n 2-Ispis svih korisnika iznad 20 godina " +
+                            "\n 3-Ispis svih korisnika s 2 ili više putovanja" +
+                            "\n 0-Povratak na glavni izbornik";
+
                         var overview_input = input_valid(menu_text,3);
 
                         if (overview_input == 1)
@@ -532,7 +551,8 @@ namespace App_putovanja
 
 
 
-            void trip_menu(int trip_menu_input)
+            void trip_menu(int trip_menu_input, Dictionary<int, Tuple<string, double, double, double, double>> trips,
+                Dictionary<int, Tuple<string, string, string, List<int>>> users)
             {
                 string menu_text;
                 string confirmation;
@@ -559,7 +579,11 @@ namespace App_putovanja
                     case 2:
                         Console.Clear();
                         Console.Write("Brisanje putovanja");
-                        menu_text = "\n 1-Unos ID-a \n 2-Putovanja s većim troškovima od unesenog iznosa \n 3-Putovanja s manjim troškovima od unesenog iznosa";
+                        menu_text = "\n 1-Unos ID-a " +
+                            "\n 2-Putovanja s većim troškovima od unesenog iznosa " +
+                            "\n 3-Putovanja s manjim troškovima od unesenog iznosa" +
+                            "\n 0-Povratak na glavni izbornik";
+
                         var input_delete = input_valid(menu_text,3);
 
                         if (input_delete == 1)
@@ -589,7 +613,12 @@ namespace App_putovanja
                     case 4:
                         Console.Clear();
                         Console.Write("Pregled svih putovanja \n \n ");
-                        menu_text = "1-Prema redoslijedu spremanja \n 2-Prema trošku uzlazno \n 3-Prema trošku silazno \n 4-Prema kilometraži uzlazno \n 5-Prema kilometraži silazno \n 6-Prema datumu uzlazno \n 7-Prema datumu silazno";
+                        menu_text = "1-Prema redoslijedu spremanja " +
+                            "\n 2-Prema trošku uzlazno \n 3-Prema trošku silazno " +
+                            "\n 4-Prema kilometraži uzlazno \n 5-Prema kilometraži silazno " +
+                            "\n 6-Prema datumu uzlazno \n 7-Prema datumu silazno" +
+                            "\n 0-Povratak na glavni izbornik";
+
                         var input_overview = input_valid(menu_text, 7);
 
                         trips_overview(trips, input_overview);
@@ -599,12 +628,20 @@ namespace App_putovanja
                     case 5:
                         Console.Clear();
                         Console.WriteLine("Izvještaji i analize \n \n Izaberite korisnika \n");
-                        foreach (var user in users) { Console.WriteLine("{0} - {1} - {2} - {3}", user.Key, user.Value.Item1, user.Value.Item2, user.Value.Item3); }
+
+                        foreach (var user in users) { Console.WriteLine("{0} - {1} - {2} - {3}", 
+                            user.Key, user.Value.Item1, user.Value.Item2, user.Value.Item3); }
 
                         var id = input_valid("0", users.Count() - 1);
 
                         Console.Write("\n Odaberite željeni izvještaj \n \n ");
-                        menu_text = "1-Ukupna potrošnja goriva \n 2-Ukupni troškovi goriva \n 3-Prosječna potrošnja goriva \n 4-Putovanje s najvećom potrošnjom goriva \n 5-Pregled putovanja po određenom datumu";
+                        menu_text = "1-Ukupna potrošnja goriva " +
+                            "\n 2-Ukupni troškovi goriva " +
+                            "\n 3-Prosječna potrošnja goriva " +
+                            "\n 4-Putovanje s najvećom potrošnjom goriva " +
+                            "\n 5-Pregled putovanja po određenom datumu " +
+                            "\n 0-Povratak na glavni izbornik";
+
                         var input_report = input_valid(menu_text,5);
 
                         var user_trips = users[id].Item4;
@@ -628,17 +665,36 @@ namespace App_putovanja
 
 
             bool inApp = true;
+
+
+            var users = new Dictionary<int, Tuple<string, string, string, List<int>>>();
+            users[0] = Tuple.Create("Ana", "Anic", "1985-04-12", new List<int> { 1, 2 });
+            users[1] = Tuple.Create("Ivo", "Ivic", "1992-09-25", new List<int> { 5 });
+            users[2] = Tuple.Create("Hrvoje", "Horvat", "2000-07-06", new List<int> { 1, 3, 4 });
+            users[3] = Tuple.Create("Maria", "Maric", "2002-07-09", new List<int>());
+
+
+            var trips = new Dictionary<int, Tuple<string, double, double, double, double>>();
+            trips[0] = Tuple.Create("2025-03-15", 350.0, 20.5, 1.60, 32.8);
+            trips[1] = Tuple.Create("2025-03-18", 120.0, 8.0, 1.55, 12.4);
+            trips[2] = Tuple.Create("2025-09-10", 100.0, 6.0, 1.45, 8.7);
+            trips[3] = Tuple.Create("2025-12-11", 40.0, 6.0, 1.40, 8.4);
+            trips[4] = Tuple.Create("2025-06-02", 320.0, 20.0, 1.65, 33.0);
+
+
+
+
             while (inApp)
             {
                 Console.Clear();
                 var menu_input = main_input();
                 if (menu_input == 1)
                 {
-                    users_menu(users_input());
+                    users_menu(users_input(), users, trips);
                 }
                 else if (menu_input == 2)
                 {
-                    trip_menu(trip_input());
+                    trip_menu(trip_input(), trips, users);
                 }
                 else if (menu_input == 0)
                 {
